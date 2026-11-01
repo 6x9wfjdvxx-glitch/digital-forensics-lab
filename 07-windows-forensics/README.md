@@ -2,55 +2,59 @@
 
 ## Objetivo
 
-Investigar sistemas Windows por meio dos principais artefatos de execução, atividade do usuário, sistema de arquivos e logs.
+Investigar sistemas Windows por meio de seus artefatos de registro, execução, atividade do usuário, logs de eventos, sistema de arquivos NTFS e cópias de sombra, reconstruindo acessos, execuções, persistência, movimentação lateral, roubo de credenciais e tentativas de ocultação.
 
-## Tópicos abordados
+## Trilha de estudo recomendada
 
-- Registro do Windows: SAM, SYSTEM, SOFTWARE, NTUSER.DAT e UsrClass.dat
-- Artefatos de execução: Prefetch, Amcache, ShimCache, UserAssist e BAM/DAM
-- Atividade do usuário: LNK, Jump Lists, ShellBags e RecentDocs
-- NTFS: $MFT, $UsnJrnl e $LogFile
-- Logs de eventos (EVTX): autenticação, serviços e PowerShell
-- Persistência, SRUM, Volume Shadow Copies e Lixeira
+```mermaid
+flowchart LR
+    A["1. Arquitetura e fontes"] --> B["2. Registro do Windows"]
+    B --> C["3. Execução e atividade"]
+    C --> D["4. Logs de eventos"]
+    D --> E["5. NTFS, Lixeira e VSS"]
+    E --> F["6. Persistência e lateralidade"]
+    F --> G["7. Ferramentas e checklist"]
+    G --> H["8. Casos e erros comuns"]
+```
 
-## Procedimento de referência
+## Conteúdo da pasta
 
-1. Coletar os artefatos-alvo por triagem (KAPE) ou por imagem completa
-2. Processar com as ferramentas de parsing
-3. Reconstruir execução, acesso a arquivos e uso de dispositivos USB
-4. Correlacionar na linha do tempo
-5. Documentar os achados com o caminho e o hash do artefato
+| Ordem | Arquivo | Objetivo |
+|---|---|---|
+| 1 | [arquitetura-e-fontes-de-evidencia-windows.md](arquitetura-e-fontes-de-evidencia-windows.md) | Estrutura do Windows, locais dos artefatos e mapa de perguntas |
+| 2 | [registro-do-windows-e-configuracoes.md](registro-do-windows-e-configuracoes.md) | Hives, USB, atividade do usuário, execução e persistência |
+| 3 | [artefatos-de-execucao-e-atividade-do-usuario.md](artefatos-de-execucao-e-atividade-do-usuario.md) | Prefetch, Amcache, ShimCache, BAM, SRUM, LNK e navegadores |
+| 4 | [logs-de-eventos-e-autenticacao-windows.md](logs-de-eventos-e-autenticacao-windows.md) | Eventos de segurança, tipos de logon, RDP, Sysmon e PowerShell |
+| 5 | [ntfs-lixeira-e-volume-shadow-copies.md](ntfs-lixeira-e-volume-shadow-copies.md) | MFT, USN, ADS, Lixeira, VSS e recuperação de exclusões |
+| 6 | [persistencia-movimento-lateral-e-credenciais.md](persistencia-movimento-lateral-e-credenciais.md) | Persistência, lateralidade, credenciais e evasão, com ATT&CK |
+| 7 | [ferramentas-triagem-modelos-e-checklist-windows.md](ferramentas-triagem-modelos-e-checklist-windows.md) | KAPE, ferramentas EZ, fluxo de triagem, modelos e checklist |
+| 8 | [casos-de-uso-e-erros-comuns-em-windows.md](casos-de-uso-e-erros-comuns-em-windows.md) | Seis cenários, erros comuns e exercícios |
 
-## Ferramentas
+## Princípios
 
-- KAPE
-- Eric Zimmerman's Tools (MFTECmd, EvtxECmd, RECmd, PECmd e LECmd)
-- Timeline Explorer
-- Autopsy
-- Velociraptor
+- Distinguir presença, execução e acesso, e exigir corroboração por mais de um artefato
+- Entender o que cada carimbo e cada evento realmente representam
+- Coletar também os logs de transação dos hives e as cópias de sombra
+- Verificar a política de auditoria antes de concluir pela ausência de atividade
+- Normalizar horários para UTC e declarar o fuso e a margem de erro
+- Registrar ferramentas, versões, comandos e hashes para reprodutibilidade
+- Mapear os achados para o MITRE ATT&CK e declarar o grau de confiança
 
-## Artefatos e saídas
+## Relação com outras pastas
 
-- Relatório de artefatos de execução
-- Mapa de contas e logons
-- Lista de persistências
-
-## Cuidados de integridade e legalidade
-
-- Trabalhar sempre sobre cópias verificadas por hash, nunca sobre a evidência original
-- Registrar ferramentas, versões, horários (em UTC) e responsáveis
-- Manter a cadeia de custódia (pasta 02-cadeia-de-custodia) e atuar somente com autorização e base legal
-
-## Arquivos previstos para expansão
-
-- checklist-triagem-windows.md
-- mapa-de-artefatos-windows.md
-- eventos-evtx-prioritarios.md
+- 03-coleta-de-evidencias e 04-hash-e-integridade: aquisição e verificação
+- 05-timeline-analysis: linha do tempo, normalização e detecção de manipulação
+- 06-evidencias-digitais: validade e apresentação das evidências
+- Pastas de memória, disco, logs, rede, malware e ransomware: aprofundamentos
 
 ## Referências
 
-- Carvey, H. Windows Forensic Analysis Toolkit (4ª ed., 2014)
-- SANS FOR500: Windows Forensic Analysis
-- Pôsteres SANS DFIR (Windows Forensic Analysis)
-- Microsoft Learn: Windows security auditing events
+- Carvey, H. Windows Forensic Analysis Toolkit. 4. ed. (2014)
+- Carvey, H. Windows Registry Forensics. 2. ed. (2016)
+- Carrier, B. File System Forensic Analysis (2005)
+- Russinovich, M.; Solomon, D.; Ionescu, A. Windows Internals. 7. ed. (2017)
+- SANS Institute. FOR500: Windows Forensic Analysis; FOR508: Advanced Incident Response, Threat Hunting and Digital Forensics
 - MITRE ATT&CK (Enterprise, Windows)
+- Microsoft Learn. Eventos de auditoria de segurança do Windows; Sysinternals (Sysmon e Autoruns)
+- Documentação do KAPE, das ferramentas de Eric Zimmerman, do RegRipper, do Hayabusa e do Velociraptor
+- NIST SP 800-86 (2006); ISO/IEC 27037:2012; ISO/IEC 27042:2015
