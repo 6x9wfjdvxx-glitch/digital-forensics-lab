@@ -2,58 +2,63 @@
 
 ## Objetivo
 
-Coletar, normalizar e analisar logs de sistemas, aplicações, rede, identidade e nuvem para reconstruir eventos e detectar atividades maliciosas.
+Estruturar a gestão, a coleta, o parsing, a análise e a validação de logs de sistemas, redes, identidade, aplicações e nuvem, de modo a detectar atividades maliciosas, reconstruir incidentes e sustentar conclusões com integridade, reprodutibilidade e atenção aos requisitos legais e de privacidade.
 
-## Tópicos abordados
+## Trilha de estudo recomendada
 
-- Fontes de log: sistema operacional, aplicações, rede, identidade e nuvem
-- Normalização, sincronização de tempo e retenção
-- Eventos Windows prioritários: 4624, 4625, 4688, 4672, 7045 e 1102
-- Syslog, auditd e logs web (Apache, Nginx e IIS)
-- Detecção com regras Sigma e consultas (KQL e SPL)
-- Integridade dos logs e centralização em SIEM
+```mermaid
+flowchart LR
+    A["1. Gestão e arquitetura"] --> B["2. Fontes, formatos e parsing"]
+    B --> C["3. Consultas, Sigma e detecção"]
+    C --> D["4. Técnicas de análise"]
+    D --> E["5. Web, DNS, proxy e rede"]
+    E --> F["6. Integridade e validade jurídica"]
+    F --> G["7. Ferramentas e checklist"]
+    G --> H["8. Casos e erros comuns"]
+```
 
-## Procedimento de referência
+## Conteúdo da pasta
 
-1. Mapear e coletar as fontes relevantes preservando o original
-2. Normalizar horários e formatos
-3. Buscar padrões de autenticação, privilégios, execução e persistência
-4. Correlacionar entre as fontes
-5. Documentar as consultas, os resultados e as limitações
+| Ordem | Arquivo | Objetivo |
+|---|---|---|
+| 1 | [fundamentos-gestao-e-arquitetura-de-logs.md](fundamentos-gestao-e-arquitetura-de-logs.md) | Ciclo de vida, política, arquitetura, retenção e lacunas de logging |
+| 2 | [fontes-de-log-formatos-e-parsing.md](fontes-de-log-formatos-e-parsing.md) | Catálogo de fontes, formatos, esquemas e técnicas de parsing |
+| 3 | [linguagens-de-consulta-sigma-e-engenharia-de-deteccao.md](linguagens-de-consulta-sigma-e-engenharia-de-deteccao.md) | KQL, SPL, Sigma e ciclo de engenharia de detecção |
+| 4 | [tecnicas-de-analise-e-deteccao-de-anomalias.md](tecnicas-de-analise-e-deteccao-de-anomalias.md) | Frequência, baseline, beaconing, DNS, geovelocidade e calibração |
+| 5 | [analise-de-logs-web-dns-proxy-e-rede.md](analise-de-logs-web-dns-proxy-e-rede.md) | Logs web, DNS, proxy, firewall, VPN, e-mail e Zeek |
+| 6 | [integridade-retencao-e-validade-juridica-dos-logs.md](integridade-retencao-e-validade-juridica-dos-logs.md) | Integridade, retenção, privacidade e apresentação como prova |
+| 7 | [ferramentas-pipelines-modelos-e-checklist-de-logs.md](ferramentas-pipelines-modelos-e-checklist-de-logs.md) | Ferramentas, pipeline, playbook de 60 minutos, modelos e checklist |
+| 8 | [casos-de-uso-e-erros-comuns-em-logs.md](casos-de-uso-e-erros-comuns-em-logs.md) | Sete cenários, erros comuns e exercícios |
 
-## Ferramentas
+## Princípios
 
-- Chainsaw
-- Hayabusa
-- Sigma
-- Splunk
-- Elastic e OpenSearch
-- Wazuh
-- Microsoft Sentinel (KQL)
-- Log Parser
+- Preservar o log bruto e produzir as camadas derivadas separadamente
+- Normalizar os horários para UTC e documentar fusos, desvios e margens de erro
+- Centralizar os logs, com transporte seguro, imutabilidade e acesso restrito
+- Declarar lacunas e verificar o que a política de auditoria efetivamente registra
+- Tratar os resultados das técnicas como candidatos e corroborá-los com fontes independentes
+- Registrar consultas, ferramentas e versões para reprodutibilidade
+- Minimizar dados pessoais e restringir o acesso aos logs
+- Distinguir tentativa de comprometimento e comprometimento confirmado
 
-## Artefatos e saídas
+## Relação com outras pastas
 
-- Relatório de análise de logs
-- Biblioteca de consultas e regras
-- Inventário de fontes de log
-
-## Cuidados de integridade e legalidade
-
-- Trabalhar sempre sobre cópias verificadas por hash, nunca sobre a evidência original
-- Registrar ferramentas, versões, horários (em UTC) e responsáveis
-- Manter a cadeia de custódia (pasta 02-cadeia-de-custodia) e atuar somente com autorização e base legal
-
-## Arquivos previstos para expansão
-
-- eventos-windows-prioritarios.md
-- consultas-kql-e-spl.md
-- checklist-fontes-de-log.md
+- 04-hash-e-integridade e 02-cadeia-de-custodia: hash, manifestos e custódia de logs exportados
+- 05-timeline-analysis: normalização de tempo e correlação multifonte
+- 06-evidencias-digitais: validade e apresentação de evidências, inclusive logs
+- 07-windows-forensics e 08-linux-forensics: logs de sistemas operacionais em detalhe
+- Pastas de rede, e-mail, nuvem, Azure, M365 e threat hunting: aprofundamentos por fonte e por técnica
 
 ## Referências
 
-- NIST SP 800-92: Guide to Computer Security Log Management (2006)
-- MITRE ATT&CK: Data Sources
-- Projeto Sigma (regras de detecção)
-- Lei nº 12.965/2014 (Marco Civil da Internet), arts. 13 e 15 (guarda de registros)
-- ISO/IEC 27002:2022, controle 8.15 (registro de eventos)
+- Kent, K.; Souppaya, M. NIST SP 800-92: Guide to Computer Security Log Management (2006)
+- NIST SP 800-53 Rev. 5 (família AU); NIST SP 800-61 Rev. 3 (2025)
+- CIS Controls v8.1 (controle 8); ISO/IEC 27002:2022 (controles 8.15, 8.16 e 8.17)
+- RFC 3164, RFC 5424, RFC 5425, RFC 6587 e RFC 3339
+- MITRE ATT&CK; Sigma (SigmaHQ); Atomic Red Team
+- OWASP. Top 10 (2021) e Logging Cheat Sheet
+- Chuvakin, A.; Schmidt, K.; Phillips, C. Logging and Log Management (2013)
+- Davidoff, S.; Ham, J. Network Forensics (2012)
+- Brasil. Lei nº 12.965/2014 (Marco Civil da Internet); Lei nº 13.709/2018 (LGPD)
+- Documentação do Zeek, Elastic, Splunk, Microsoft Sentinel (KQL), Hayabusa e Chainsaw
+- SANS Institute. FOR508, FOR572 e SEC555
